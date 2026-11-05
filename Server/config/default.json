@@ -1,0 +1,13 @@
+{
+    "ConnectionDetails": {
+        "host": "localhost",
+        "port": 3306,
+        "database": "nodedb",
+        "user": "root",
+        "password": ""
+    },
+    "AppicationPort": 9999,
+    "jwt": {
+        "secretKey": ""
+    }
+}
