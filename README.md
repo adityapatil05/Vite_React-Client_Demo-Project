@@ -1,6 +1,6 @@
 # Employee Management System
 
-A full-stack employee management application with a React/Vite client and an Express API backed by MySQL. Users sign in to receive a JWT, then manage employee records from the protected dashboard.
+A full-stack employee management application with a React/Vite client and a Node.js/Express API backed by MySQL. Users sign in to receive a JWT, then manage employee records from the protected dashboard.
 
 ## Features
 
