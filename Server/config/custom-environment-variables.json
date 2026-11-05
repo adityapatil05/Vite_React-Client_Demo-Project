@@ -9,5 +9,9 @@
     "AppicationPort": "APP_PORT",
     "jwt": {
         "secretKey": "JWT_SECRET"
+    },
+    "auth": {
+        "username": "AUTH_USERNAME",
+        "password": "AUTH_PASSWORD"
     }
 }

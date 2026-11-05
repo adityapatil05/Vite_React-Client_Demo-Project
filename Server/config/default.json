@@ -9,5 +9,9 @@
     "AppicationPort": 9999,
     "jwt": {
         "secretKey": ""
+    },
+    "auth": {
+        "username": "",
+        "password": ""
     }
 }

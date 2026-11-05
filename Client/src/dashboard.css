@@ -1,0 +1,28 @@
+.search-input-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.search-input-wrapper input {
+  padding: 8px 10px 8px 34px;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: #6c757d;
+  stroke-linecap: round;
+  stroke-width: 2;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.form-field {
+  border: 1;
+  outline: none;
+  box-shadow: none;
+}

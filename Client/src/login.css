@@ -1,0 +1,85 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 24px 12px;
+  box-sizing: border-box;
+}
+
+.login-card {
+  width: min(100%, 350px);
+  padding: 28px 24px 24px;
+  border: 1px solid #dbdbdb;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 8%);
+  box-sizing: border-box;
+}
+
+.login-title {
+  margin: 0 0 20px;
+  font-size: 28px;
+  font-weight: 600;
+  color: #262626;
+}
+
+.login-table {
+  width: 100%;
+  margin: 0;
+}
+
+.login-table td {
+  padding: 6px 0;
+  vertical-align: middle;
+}
+
+.login-table td.text-center {
+  display: block;
+  padding-bottom: 4px;
+  text-align: left !important;
+  color: #555;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.login-table td:not(.text-center) {
+  display: block;
+}
+
+.login-table .form-field {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 1px solid #dbdbdb;
+  border-radius: 6px;
+  background: #fafafa;
+  box-sizing: border-box;
+}
+
+.login-table .form-field:focus {
+  border-color: #8e8e8e;
+  outline: none;
+  background: #fff;
+}
+
+.login-button {
+  width: 100%;
+  margin-top: 14px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.login-alert {
+  margin: 16px 0 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 16px 8px;
+  }
+
+  .login-card {
+    padding: 24px 20px 20px;
+  }
+}
