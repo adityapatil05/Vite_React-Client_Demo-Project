@@ -2,9 +2,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
+import API_URL from "./api";
 
 function Login() {
 const [credentials,setCredentials]=useState({username:"",password:""})
+const [otp,setOtp] = useState("");
+const [otpRequested,setOtpRequested] = useState(false);
 const [message,setMessage] =useState("");
 
 const navigate =useNavigate();
@@ -25,27 +28,28 @@ const OnTextChange=(args)=>{
 }
 
 const SignIn=()=>{
-    // console.log(credentials);
-    axios.post(`http://127.0.0.1:9999/login`,credentials)
+    axios.post(`${API_URL}/login/request-otp`,credentials)
     .then((result)=>{
-        if(result.data.jwt!=undefined && 
-            result.data.jwt!=null
-        )
-        {
-            //succes
-            console.log(result.data.jwt);
-            sessionStorage.setItem("token",result.data.jwt)
-            navigate("/db",{replace:true});
-            
-        }
-        else{
-            //fail
-            console.log(result.data.Message);
-            setMessage(result.data.Message);
-        }
+        setOtpRequested(true);
+        setMessage(result.data.Message);
     })
     .catch((error)=>{
-        setMessage("Something went Wrong!");
+        setMessage(error.response?.data?.Message || "Something went Wrong!");
+        console.log(error)
+    })
+}
+
+const VerifyOtp=()=>{
+    axios.post(`${API_URL}/login/verify-otp`, {
+        username: credentials.username,
+        otp
+    })
+    .then((result)=>{
+        sessionStorage.setItem("token",result.data.jwt)
+        navigate("/db",{replace:true});
+    })
+    .catch((error)=>{
+        setMessage(error.response?.data?.Message || "Something went Wrong!");
         console.log(error)
     })
 }
@@ -79,13 +83,36 @@ return ( <>
                     </tr>
                     </tbody>
                     </table>
-                    <button
+                    {!otpRequested ? <button
                         className="btn btn-outline-info btn-dark login-button"
                         onClick={SignIn}
                     >
-                        Sign In
-                    </button>
+                        Send OTP
+                    </button> : <>
+                        <label className="otp-label" htmlFor="otp">Email OTP:</label>
+                        <input
+                            id="otp"
+                            className="form-field"
+                            type="text"
+                            inputMode="numeric"
+                            maxLength="6"
+                            value={otp}
+                            onChange={(event) => setOtp(event.target.value)}
+                        />
+                        <button
+                            className="btn btn-outline-info btn-dark login-button"
+                            onClick={VerifyOtp}
+                        >
+                            Verify OTP
+                        </button>
+                    </>}
                     {message && <div className="alert alert-warning login-alert">{message}</div>}
+                    <button className="btn btn-link login-button" onClick={() => navigate("/signup")}>
+                        Create an account
+                    </button>
+                    <button className="btn btn-link login-button" onClick={() => navigate("/reset-password")}>
+                        Forgot password?
+                    </button>
                 </div>
             </div>
              

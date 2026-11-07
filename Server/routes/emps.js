@@ -1,54 +1,115 @@
-const config=require("config");
-const mysql=require('mysql2');
-const express =require('express');
-const app=express.Router();
+const express = require('express');
+const mysql = require('mysql2/promise');
+const { getConnectionDetails } = require('../db');
 
+const app = express.Router();
+let ownershipColumnReady;
 
-const connectiondetails=config.get("ConnectionDetails");
+const getDatabase = () => mysql.createConnection(getConnectionDetails());
 
-const executeQuery=(queryText,request,response)=>{
-        var connection= mysql.createConnection(connectiondetails)
-        connection.query(queryText,(error,result)=>{
-        console.log(result);
-        console.log(error);
+const ensureOwnershipColumn = async () => {
+    if (!ownershipColumnReady) {
+        ownershipColumnReady = (async () => {
+            const database = await getDatabase();
+            try {
+                const [columns] = await database.execute(
+                    `SELECT COLUMN_NAME
+                     FROM INFORMATION_SCHEMA.COLUMNS
+                     WHERE TABLE_SCHEMA = DATABASE()
+                       AND TABLE_NAME = 'Emp'
+                       AND COLUMN_NAME = 'owner_username'`
+                );
+                if (columns.length === 0) {
+                    await database.execute(
+                        'ALTER TABLE Emp ADD COLUMN owner_username VARCHAR(100) NULL'
+                    );
+                }
+            } finally {
+                await database.end();
+            }
+        })().catch((error) => {
+            ownershipColumnReady = undefined;
+            throw error;
+        });
+    }
+    return ownershipColumnReady;
+};
 
-        if (error==null) {
+const executeQuery = async (queryText, parameters, request, response) => {
+    try {
+        await ensureOwnershipColumn();
+        const database = await getDatabase();
+        try {
+            const [result] = await database.execute(queryText, parameters);
             response.send(result);
+        } finally {
+            await database.end();
         }
-        else{
-            response.send(error);
-        }
-        connection.end();
-    })
-}
+    } catch (error) {
+        console.error('Employee query failed:', error.message);
+        response.status(500).send({ message: 'Could not access employee records.' });
+    }
+};
 
-app.get("/",(request,response)=>{
-    var queryText=`select * from emp`;
-    executeQuery(queryText,request,response);
-    // response.send("GET request received for /emps");
-})
+app.get('/', (request, response) => {
+    executeQuery(
+        'SELECT `No`, Name, Address FROM Emp WHERE owner_username = ?',
+        [request.user.username],
+        request,
+        response
+    );
+});
 
-app.post("/",(request,response)=>{
-    console.log(request.body);
-    var Name=request.body.Name;
-    var Address=request.body.Address;
-    var queryText=`insert into emp(Name,Address) values('${Name}','${Address}')`;
-    console.log(queryText);
-    executeQuery(queryText,request,response);
-})
+app.get('/all', (request, response) => {
+    if (request.user.role !== 'admin') {
+        response.status(403).send({ message: 'Administrator access required.' });
+        return;
+    }
+    executeQuery(
+        'SELECT `No`, Name, Address, owner_username FROM Emp',
+        [],
+        request,
+        response
+    );
+});
 
-app.put("/:No",(request,response)=>{
-    var No=request.params.No;
-    var Name=request.body.Name;
-    var Address=request.body.Address;
-    var queryText=`update emp set Name='${Name}',Address='${Address}' where No =${No}`;
-    executeQuery(queryText,request,response);
-})
+app.post('/', (request, response) => {
+    executeQuery(
+        'INSERT INTO Emp (Name, Address, owner_username) VALUES (?, ?, ?)',
+        [request.body.Name, request.body.Address, request.user.username],
+        request,
+        response
+    );
+});
 
-app.delete("/:No",(request,response)=>{
-    var No=request.params.No;
-    var queryText=`delete from emp where No=${No}`;
-    executeQuery(queryText,request,response);
-})
+app.put('/:No', (request, response) => {
+    const query = request.user.role === 'admin'
+        ? 'UPDATE Emp SET Name = ?, Address = ? WHERE `No` = ?'
+        : 'UPDATE Emp SET Name = ?, Address = ? WHERE `No` = ? AND owner_username = ?';
+    const parameters = request.user.role === 'admin'
+        ? [request.body.Name, request.body.Address, request.params.No]
+        : [request.body.Name, request.body.Address, request.params.No, request.user.username];
+    executeQuery(
+        query,
+        parameters,
+        request,
+        response
+    );
+});
 
-module.exports=app;
+app.delete('/:No', (request, response) => {
+    const query = request.user.role === 'admin'
+        ? 'DELETE FROM Emp WHERE `No` = ?'
+        : 'DELETE FROM Emp WHERE `No` = ? AND owner_username = ?';
+    const parameters = request.user.role === 'admin'
+        ? [request.params.No]
+        : [request.params.No, request.user.username];
+    executeQuery(
+        query,
+        parameters,
+        request,
+        response
+    );
+});
+
+module.exports = app;

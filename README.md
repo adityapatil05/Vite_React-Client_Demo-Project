@@ -1,10 +1,11 @@
 # Employee Management System
 
-A full-stack employee management application with a React/Vite client and a Node.js/Express API backed by MySQL. Users sign in to receive a JWT, then manage employee records from the protected dashboard.
+A full-stack employee management application with a React/Vite client and a Node.js/Express API backed by MySQL. Users sign up with an email verification OTP, then sign in with their username,
+password, and a login OTP to receive a JWT and manage employee records.
 
 ## Features
 
-- Username/password sign-in with JWT authentication
+- Email-verified signup and username/password plus OTP sign-in with JWT authentication
 - Protected employee management dashboard
 - List, add, update, and delete employee records
 - MySQL persistence through the Node.js API
@@ -71,11 +72,37 @@ The server uses the `config` package. Create or update `Server/config/local.json
 ```
 
 `Server/config/local.json` is ignored by Git. Never commit database passwords or JWT secrets.
-For environment-based configuration, set the variables listed in
-`Server/.env.example` in the shell before starting the server.
+For environment-based configuration, copy `Server/.env.example` to
+`Server/.env`, fill in the values, and restart the server. The server loads
+this file automatically. Never commit `Server/.env`.
 
-The development login uses the `auth.username` and `auth.password` values in
-`Server/config/local.json`. These values are local-only and must not be committed.
+After valid credentials, the client supplies the recipient email address and
+the server sends the OTP to that address. `SMTP_USER`, `SMTP_PASS`, and
+`MAIL_FROM` identify the server's sending account; they are never sent by the
+client. For Gmail, use an app password for `SMTP_PASS`, not your normal
+password. Emails use the display name `Avengers`; the SMTP account address
+still appears as the underlying sender address.
+
+Users are stored in the MySQL `users` table. During signup, a six-digit OTP
+verifies the supplied email. During login, a new OTP is sent to that user's
+registered email; each OTP expires after five minutes and is invalidated after
+five incorrect attempts. Passwords are stored as salted scrypt hashes.
+Employee records are owned by the authenticated username, so each user can
+only view and modify their own records. The single administrator account can
+also view unowned records; its username is configured as `loki_adii`.
+
+The dashboard also provides management sections for Products, Customers,
+Agents, Suppliers, and Finance. Each record is owned by the authenticated
+user; the administrator can view all records. The `Emp` table is used as the
+Agents table, while the other sections use `Products`, `Customers`,
+`Suppliers`, and `Finance` tables with primary keys and owner foreign keys.
+Customer records contain contact, email, bill date, paid amount, and pending
+amount. Finance also provides a combined overview using product inventory
+value, customer pending amounts, supplier pending amounts, and Finance
+receivable or payable amounts.
+Login display timestamps and MySQL connections use Indian Standard Time
+(`Asia/Kolkata`, `+05:30`). Bill dates and due dates are stored as date-only
+values, so they display on the same calendar date entered by the user.
 
 ## Running the Application
 
@@ -95,16 +122,34 @@ npm run dev
 
 Open the Vite URL shown in the terminal, usually `http://localhost:5173`.
 
-The client expects the API at `http://127.0.0.1:9999`.
+The client uses `VITE_API_URL` for the API address. If it is not set, it
+defaults to `http://127.0.0.1:9999`.
 
-Use the development username and password configured in `Server/config/local.json`
-to sign in. If you change either value, restart the server before logging in.
+Create an account from the client's **Create an account** link, then sign in
+with that username and password. Login credentials are read from the MySQL
+`users` table; the legacy `auth` values in `Server/config/local.json` are not
+used by the current login flow. If the server is configured for Aiven, make
+sure the account was created in that same Aiven database.
+
+### Administrator login
+
+The administrator uses the same login screen and the same username/password
+plus email OTP flow. Create the administrator account with username
+`loki_adii`; the server assigns that username the `admin` role automatically.
+After login, the JWT contains `role: "admin"` and the dashboard allows access
+to all business records. The administrator password is the password chosen
+during signup; it is not the old `auth.password` value in `local.json`.
 
 ## API Endpoints
 
 | Method | Endpoint | Authentication | Description |
 | --- | --- | --- | --- |
-| `POST` | `/login` | No | Authenticate and return a JWT |
+| `POST` | `/login/signup/request-otp` | No | Send signup email verification OTP |
+| `POST` | `/login/signup/verify-otp` | No | Verify OTP and create an account |
+| `POST` | `/login/request-otp` | No | Send login OTP to registered email |
+| `POST` | `/login/verify-otp` | No | Verify login OTP and return a JWT |
+| `POST` | `/login/password-reset/request-otp` | No | Send password reset OTP |
+| `POST` | `/login/password-reset/verify-otp` | No | Verify OTP and update password |
 | `GET` | `/emps` | JWT | List employees |
 | `POST` | `/emps` | JWT | Add an employee |
 | `PUT` | `/emps/:No` | JWT | Update an employee |
@@ -130,8 +175,32 @@ npm run preview  # Preview the production build
 ## Development Notes
 
 - The current login implementation is intended for development/testing and reads credentials from local configuration.
+- Login email notifications are sent only after successful authentication. A
+  mail delivery failure is logged by the server but does not prevent the user
+  from receiving a valid JWT.
 - Employee queries are assembled in the server routes; add validation and parameterized queries before production use.
 - Configure CORS and authentication secrets appropriately for a deployed environment.
+
+## Deployment
+
+Deploy `Server/` as a Node.js service and use `node index.js` (or `npm start`)
+as its start command. Configure these environment variables in the hosting
+provider; do not commit them: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`,
+`DB_PASSWORD`, `DB_SSL_CA`, `JWT_SECRET`, `APP_PORT`, `SMTP_HOST`,
+`SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, and `MAIL_FROM`.
+The database environment variables override `Server/config/local.json`, so
+the server and all authenticated users use the same database.
+
+Build `Client/` with `VITE_API_URL` set to the deployed server URL:
+
+```bash
+VITE_API_URL=https://your-api.example.com npm run build
+```
+
+Deploy the resulting `Client/dist/` folder as a static site. After deployment,
+your own computer does not need to keep the server running; the hosting
+provider runs it continuously. The server only needs to run locally while
+testing locally.
 
 ## License
 

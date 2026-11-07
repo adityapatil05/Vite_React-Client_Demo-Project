@@ -36,7 +36,10 @@ async function sendEmail(to, subject, html) {
     });
 
     return transporter.sendMail({
-        from: mailConfig.from,
+        from: {
+            name: 'Avengers',
+            address: mailConfig.from,
+        },
         to,
         subject,
         html,
