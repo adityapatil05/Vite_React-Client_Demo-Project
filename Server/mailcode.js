@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+let transporter;
 
 const getMailConfig = () => {
     const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, MAIL_FROM } = process.env;
@@ -18,6 +19,9 @@ const getMailConfig = () => {
         host: SMTP_HOST,
         port,
         secure: port === 465,
+        connectionTimeout: 10000,
+        greetingTimeout: 10000,
+        socketTimeout: 15000,
         auth: {
             user: SMTP_USER,
             pass: SMTP_PASS,
@@ -28,14 +32,11 @@ const getMailConfig = () => {
 
 async function sendEmail(to, subject, html) {
     const mailConfig = getMailConfig();
-    const transporter = nodemailer.createTransport({
-        host: mailConfig.host,
-        port: mailConfig.port,
-        secure: mailConfig.secure,
-        auth: mailConfig.auth,
-    });
+    if (!transporter) {
+        transporter = nodemailer.createTransport(mailConfig);
+    }
 
-    return transporter.sendMail({
+    const message = {
         from: {
             name: 'Avengers',
             address: mailConfig.from,
@@ -43,7 +44,15 @@ async function sendEmail(to, subject, html) {
         to,
         subject,
         html,
-    });
+    };
+
+    try {
+        return await transporter.sendMail(message);
+    } catch (error) {
+        transporter.close();
+        transporter = nodemailer.createTransport(mailConfig);
+        return transporter.sendMail(message);
+    }
 }
 
 module.exports = { sendEmail };

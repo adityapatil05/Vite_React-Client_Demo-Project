@@ -156,7 +156,7 @@ app.post('/signup/request-otp', async (request, response) => {
         return response.send({ Message: 'Verification OTP sent to your email.' });
     } catch (error) {
         pendingSignups.delete(username);
-        console.error('Signup OTP could not be sent:', error.message);
+        console.error('Signup OTP could not be sent:', error.code || 'UNKNOWN', error.message);
         return response.status(502).send({ Message: 'Could not start signup.' });
     }
 });

@@ -65,7 +65,9 @@ app.use("/admin",adminRoutes);
 app.use("/business",businessRoutes);
 app.use("/orders", orderRoutes);
 
-const AppicationPort=config.get("AppicationPort");
+const AppicationPort = Number(
+    process.env.PORT || process.env.APP_PORT || config.get("AppicationPort")
+);
 ensureBusinessSchema()
     .then(() => {
         app.listen(AppicationPort,()=>{console.log("Server Started...:)")});
