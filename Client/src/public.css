@@ -56,7 +56,7 @@
 
 .public-hero {
     background: linear-gradient(135deg, rgba(14, 116, 144, 0.28), rgba(30, 41, 59, 0.75));
-    border: 1px solid rgba(133, 158, 158, 0.2);
+    border: 1px solid rgba(161, 178, 178, 0.2);
     border-radius: 28px;
     min-height: 390px;
     overflow: hidden;
@@ -76,7 +76,7 @@
 
 .public-hero p,
 .content-intro p {
-    color: #6e7175;
+    color: #0e0f10;
     font-size: 1.08rem;
     line-height: 1.75;
     max-width: 650px;
