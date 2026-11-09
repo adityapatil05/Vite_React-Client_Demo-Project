@@ -17,6 +17,7 @@ password, and a login OTP to receive a JWT and manage employee records.
 - **Client:** React, Vite, React Router, Axios, Bootstrap
 - **Server:** Node.js, Express, CORS, JSON Web Token
 - **Database:** MySQL
+- **NodeMailer:** Bervo SMTP
 
 ## Project Structure
 
@@ -196,10 +197,7 @@ Build `Client/` with `VITE_API_URL` set to the deployed server URL:
 VITE_API_URL=https://your-api.example.com npm run build
 ```
 
-Deploy the resulting `Client/dist/` folder as a static site. After deployment,
-your own computer does not need to keep the server running; the hosting
-provider runs it continuously. The server only needs to run locally while
-testing locally.
+Deploy the resulting `Client/dist/` folder as a static site. 
 
 ## License
 
