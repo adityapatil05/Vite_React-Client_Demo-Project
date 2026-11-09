@@ -56,7 +56,7 @@
 
 .public-hero {
     background: linear-gradient(135deg, rgba(14, 116, 144, 0.28), rgba(30, 41, 59, 0.75));
-    border: 1px solid rgba(103, 232, 249, 0.2);
+    border: 1px solid rgba(202, 220, 220, 0.2);
     border-radius: 28px;
     min-height: 390px;
     overflow: hidden;
@@ -65,7 +65,7 @@
 
 .public-hero h1,
 .content-intro h1 {
-    color: #7d7e7f;
+    color: #656768;
     font-size: clamp(2.4rem, 6vw, 5rem);
     font-weight: 700;
     letter-spacing: -0.06em;
@@ -76,14 +76,14 @@
 
 .public-hero p,
 .content-intro p {
-    color: #abaeb2;
+    color: #dde4ed;
     font-size: 1.08rem;
     line-height: 1.75;
     max-width: 650px;
 }
 
 .eyebrow {
-    color: #02432a;
+    color: #323030;
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.18em;
@@ -174,7 +174,7 @@
 
 .public-callout {
     align-items: center;
-    background: rgba(8, 47, 73, 0.65);
+    background: rgba(14, 44, 64, 0.65);
     border: 1px solid rgba(103, 232, 249, 0.18);
     border-radius: 20px;
     display: flex;
@@ -184,7 +184,7 @@
 }
 
 .public-callout h2 {
-    color: #aabdd0;
+    color: #c7ccd1;
     margin: 8px 0 0;
 }
 
@@ -193,7 +193,7 @@
 }
 
 .story-card-highlight {
-    background: linear-gradient(145deg, rgba(14, 116, 144, 0.35), rgba(15, 23, 42, 0.75));
+    background: linear-gradient(145deg, rgba(32, 146, 178, 0.35), rgba(15, 23, 42, 0.75));
 }
 
 .content-footer {
