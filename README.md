@@ -76,12 +76,10 @@ For environment-based configuration, copy `Server/.env.example` to
 `Server/.env`, fill in the values, and restart the server. The server loads
 this file automatically. Never commit `Server/.env`.
 
-After valid credentials, the client supplies the recipient email address and
-the server sends the OTP to that address. `SMTP_USER`, `SMTP_PASS`, and
-`MAIL_FROM` identify the server's sending account; they are never sent by the
-client. For Gmail, use an app password for `SMTP_PASS`, not your normal
-password. Emails use the display name `Avengers`; the SMTP account address
-still appears as the underlying sender address.
+After valid credentials, the server sends the OTP to the registered email
+address using Google SMTP. `SMTP_USER`, `SMTP_PASS`, and `MAIL_FROM` are
+server-only variables and are never sent by the client. For Gmail, use an App
+Password for `SMTP_PASS`, not your normal password.
 
 Users are stored in the MySQL `users` table. During signup, a six-digit OTP
 verifies the supplied email. During login, a new OTP is sent to that user's
@@ -186,8 +184,8 @@ npm run preview  # Preview the production build
 Deploy `Server/` as a Node.js service and use `node index.js` (or `npm start`)
 as its start command. Configure these environment variables in the hosting
 provider; do not commit them: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`,
-`DB_PASSWORD`, `DB_SSL_CA`, `JWT_SECRET`, `APP_PORT`, `SMTP_HOST`,
-`SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, and `MAIL_FROM`.
+`DB_PASSWORD`, `DB_SSL_CA`, `JWT_SECRET`, `APP_PORT`, `SMTP_HOST`, `SMTP_PORT`,
+`SMTP_USER`, `SMTP_PASS`, and `MAIL_FROM`.
 The database environment variables override `Server/config/local.json`, so
 the server and all authenticated users use the same database.
 
