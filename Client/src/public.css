@@ -40,7 +40,7 @@
 }
 
 .public-page {
-    color: #666768;
+    color: #766f6f;
     margin: 0 auto;
     max-width: 1080px;
     overflow: hidden;
@@ -56,7 +56,7 @@
 
 .public-hero {
     background: linear-gradient(135deg, rgba(14, 116, 144, 0.28), rgba(30, 41, 59, 0.75));
-    border: 1px solid rgba(202, 220, 220, 0.2);
+    border: 1px solid rgba(133, 158, 158, 0.2);
     border-radius: 28px;
     min-height: 390px;
     overflow: hidden;
@@ -65,7 +65,7 @@
 
 .public-hero h1,
 .content-intro h1 {
-    color: #656768;
+    color: #111313;
     font-size: clamp(2.4rem, 6vw, 5rem);
     font-weight: 700;
     letter-spacing: -0.06em;
@@ -76,14 +76,14 @@
 
 .public-hero p,
 .content-intro p {
-    color: #dde4ed;
+    color: #6e7175;
     font-size: 1.08rem;
     line-height: 1.75;
     max-width: 650px;
 }
 
 .eyebrow {
-    color: #323030;
+    color: #545151;
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.18em;
@@ -103,7 +103,7 @@
 }
 
 .hero-orb {
-    border: 1px solid rgba(103, 232, 249, 0.3);
+    border: 1px solid rgba(32, 100, 109, 0.3);
     border-radius: 50%;
     height: 190px;
     position: absolute;
@@ -146,20 +146,20 @@
 .feature-card:hover,
 .story-card:hover,
 .contact-card:hover {
-    border-color: rgba(157, 222, 231, 0.5);
+    border-color: rgba(180, 239, 247, 0.5);
     transform: translateY(-5px);
 }
 
 .feature-number,
 .contact-icon {
-    color: #ade5ec;
+    color: #101b1c;
     font-weight: 700;
 }
 
 .feature-card h2,
 .story-card h2,
 .contact-card h2 {
-    color: #f8fafc;
+    color: #f2f4f6;
     font-size: 1.25rem;
     margin: 18px 0 10px;
 }
@@ -167,7 +167,7 @@
 .feature-card p,
 .story-card p,
 .contact-card p {
-    color: #e2e8f0;
+    color: #dbdadd;
     line-height: 1.65;
     margin: 0;
 }
@@ -193,7 +193,7 @@
 }
 
 .story-card-highlight {
-    background: linear-gradient(145deg, rgba(32, 146, 178, 0.35), rgba(15, 23, 42, 0.75));
+    background: linear-gradient(145deg, rgba(70, 80, 83, 0.35), rgba(15, 23, 42, 0.75));
 }
 
 .content-footer {
