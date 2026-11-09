@@ -64,6 +64,9 @@ const sections = {
 const emptyRecord = (section) => Object.fromEntries(
     sections[section].fields.map(([name]) => [name, ""])
 );
+const recordName = (section) => section === "finance"
+    ? "finance record"
+    : sections[section].icon.slice(0, -1).toLowerCase();
 
 function CustomerDashboard() {
     const token = sessionStorage.getItem("token");
@@ -73,6 +76,8 @@ function CustomerDashboard() {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [order, setOrder] = useState({ quantity: 1, paymentMethod: "cod", deliveryAddress: "", contact: "" });
     const [message, setMessage] = useState("");
+    const [productQuery, setProductQuery] = useState("");
+    const [productSearch, setProductSearch] = useState("");
 
     const loadData = () => {
         axios.get(`${API_URL}/orders/products`, { headers }).then((result) => setProducts(result.data));
@@ -91,13 +96,39 @@ function CustomerDashboard() {
         setSelectedProduct(null);
         loadData();
     }).catch((error) => setMessage(error.response?.data?.message || "Could not place order."));
+    const visibleProducts = products.filter((product) =>
+        `${product.name} ${product.price}`.toLowerCase().includes(productSearch.toLowerCase())
+    );
 
     return (
-        <>
-            <h1>Shop Products</h1>
+        <main className="dashboard-page">
+            <section className="dashboard-hero">
+                <span className="eyebrow">CUSTOMER STOREFRONT</span>
+                <h1>Find products made for your everyday needs.</h1>
+                <p>Browse the catalogue, choose what you need, and place an order with delivery details in a few simple steps.</p>
+            </section>
             {message && <div className="alert alert-warning">{message}</div>}
+            <div className="product-search">
+                <input
+                    className="form-field"
+                    type="search"
+                    placeholder="Search products by name or price"
+                    value={productQuery}
+                    onChange={(event) => setProductQuery(event.target.value)}
+                />
+                <button className="btn btn-outline-info btn-sm" onClick={() => setProductSearch(productQuery.trim())}>
+                    Search
+                </button>
+                {productSearch && <button className="btn btn-outline-secondary btn-sm"
+                    onClick={() => {
+                        setProductQuery("");
+                        setProductSearch("");
+                    }}>
+                    Clear
+                </button>}
+            </div>
             <div className="product-card-grid">
-                {products.map((product) => (
+                {visibleProducts.map((product) => (
                     <article className="product-card" key={product.id}>
                         <img src={product.image_url || "https://via.placeholder.com/300x180?text=Product"} alt={product.name} />
                         <h3>{product.name}</h3>
@@ -108,6 +139,7 @@ function CustomerDashboard() {
                     </article>
                 ))}
             </div>
+            {visibleProducts.length === 0 && <p className="empty-search-message">No products match your search.</p>}
             {selectedProduct && <div className="order-panel">
                 <h2>Order {selectedProduct.name}</h2>
                 <input className="form-field" type="number" min="1" max={selectedProduct.available_stock}
@@ -131,7 +163,7 @@ function CustomerDashboard() {
                     <td>{item.payment_method}</td><td>{item.status}</td>
                 </tr>)}</tbody>
             </table></div>
-        </>
+        </main>
     );
 }
 
@@ -146,6 +178,7 @@ function Dashboard() {
     const [financeSummary, setFinanceSummary] = useState([]);
     const [retailerOrders, setRetailerOrders] = useState([]);
     const [showOrders, setShowOrders] = useState(false);
+    const [showForm, setShowForm] = useState(false);
     const section = sections[activeSection];
     const headers = { Authorization: `bearer ${token}` };
     const endpoint = `${API_URL}/business/${activeSection}`;
@@ -180,6 +213,7 @@ function Dashboard() {
         setActiveSection(sectionName);
         setRecord(emptyRecord(sectionName));
         setSearch("");
+        setShowForm(false);
     };
 
     const save = () => {
@@ -190,6 +224,7 @@ function Dashboard() {
         request.then(() => {
             setMessage("Record saved successfully.");
             setRecord(emptyRecord(activeSection));
+            setShowForm(false);
             loadRows();
             if (activeSection === "finance") {
                 loadFinanceSummary();
@@ -219,8 +254,12 @@ function Dashboard() {
     }
 
     return (
-        <>
-            <h1>Dashboard</h1>
+        <main className="dashboard-page">
+            <section className="dashboard-hero">
+                <span className="eyebrow">BUSINESS CONTROL CENTRE</span>
+                <h1>Make every business decision count.</h1>
+                <p>Manage your operations, understand your numbers, and keep your customer relationships moving forward.</p>
+            </section>
             <nav className="dashboard-sections">
                 {Object.entries(sections).map(([key, value]) => (
                     <button
@@ -248,7 +287,19 @@ function Dashboard() {
                     </tr>)}</tbody>
                 </table></div>
             </section>}
-            <h2>{section.label}</h2>
+            <div className="section-heading">
+                <div>
+                    <span className="eyebrow">WORKSPACE</span>
+                    <h2>{section.label}</h2>
+                </div>
+                <button className="btn btn-outline-success btn-sm add-record-button"
+                    onClick={() => {
+                        setRecord(emptyRecord(activeSection));
+                        setShowForm(!showForm);
+                    }}>
+                    {showForm ? "Close form" : `Add ${recordName(activeSection)}`}
+                </button>
+            </div>
             {activeSection === "finance" && <div className="finance-summary">
                 <h3>Financial overview</h3>
                 <div className="finance-summary-grid">
@@ -266,7 +317,11 @@ function Dashboard() {
                     ))}
                 </div>
             </div>}
-            <div className="business-form">
+            {showForm && <div className="business-form form-reveal">
+                <div className="form-heading">
+                    <strong>{record[section.id] ? `Edit ${recordName(activeSection)}` : `Add ${recordName(activeSection)}`}</strong>
+                    <span>Enter the details below and save your record.</span>
+                </div>
                 {section.fields.map(([name, label, type, options]) => (
                     <label key={name}>
                         {label}
@@ -282,7 +337,7 @@ function Dashboard() {
                     </label>
                 ))}
                 <button className="btn btn-outline-success btn-sm" onClick={save}>{record[section.id] ? "Update" : "Add"}</button>
-            </div>
+            </div>}
             {message && <div className="alert alert-warning">{message}</div>}
             <input className="form-field business-search" placeholder="Search records" value={search} onChange={(event) => setSearch(event.target.value)} />
             <div className="table-responsive">
@@ -292,13 +347,16 @@ function Dashboard() {
                         {section.columns.map((column) => <td key={column}>{String(row[column] ?? "")}</td>)}
                         {profile.role === "admin" && <td>{row.owner_username || "Unassigned"}</td>}
                         <td>
-                            <button className="btn btn-sm btn-outline-dark" onClick={() => setRecord(row)}>Edit</button>{" "}
+                            <button className="btn btn-sm btn-outline-info" onClick={() => {
+                                setRecord(row);
+                                setShowForm(true);
+                            }}>Edit</button>{" "}
                             <button className="btn btn-sm btn-outline-danger" onClick={() => remove(row[section.id])}>Delete</button>
                         </td>
                     </tr>)}</tbody>
                 </table>
             </div>
-        </>
+        </main>
     );
 }
 

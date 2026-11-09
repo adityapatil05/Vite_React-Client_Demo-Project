@@ -13,6 +13,7 @@ import ResetPassword from './reset-password';
 import ProtectedRoute from './protectedRoute';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './profile.css';
+import './public.css';
 
 const getProfile = () => {
     const token = sessionStorage.getItem('token');
@@ -81,13 +82,16 @@ const Logout=()=>{
                         </button>
                     </aside>
                 </>}
-                <hr></hr>
-                <Link to={"home"}>Home</Link> { " |  "}
-                <Link to={"contact"}>Contact</Link> { " |  "}
-                <Link to={"about"}>About Us</Link> { " |  "}
-                <Link to={"db"}>Dashboard</Link> { " |  "}
-
-                <hr></hr>
+                <nav className="public-nav" aria-label="Main navigation">
+                    <Link className="public-nav-brand" to="/home">Avengers</Link>
+                    <div className="public-nav-links">
+                        <Link to="/home">Home</Link>
+                        <Link to="/about">About us</Link>
+                        <Link to="/contact">Contact</Link>
+                        {profile && <Link to="/db">Dashboard</Link>}
+                        {!profile && <Link className="btn btn-outline-info btn-sm nav-login-button" to="/login">Log in</Link>}
+                    </div>
+                </nav>
                 <Routes>
                     <Route path='/' element={<Home/>}/>
                     <Route path='/home' element={<Home/>}/>
