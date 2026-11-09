@@ -53,28 +53,23 @@ function ResetPassword() {
                 {!otpRequested ? <>
                     <label className="otp-label" htmlFor="reset-username">Username</label>
                     <input id="reset-username" className="form-field" name="username"
-                        autoComplete="username"
                         value={details.username} onChange={onChange} />
                     <label className="otp-label" htmlFor="reset-email">Registered email</label>
                     <input id="reset-email" className="form-field" type="email" name="email"
-                        autoComplete="email"
                         value={details.email} onChange={onChange} />
                     <button className="btn btn-outline-info btn-dark login-button" onClick={requestOtp}>
                         Send reset OTP
                     </button>
                 </> : <>
                     <p>Enter the OTP sent to your registered email.</p>
-                    <input id="reset-otp" className="form-field" type="text" inputMode="numeric"
-                        name="otp" autoComplete="one-time-code" maxLength="6"
+                    <input className="form-field" type="text" inputMode="numeric" maxLength="6"
                         value={otp} onChange={(event) => setOtp(event.target.value)} />
                     <label className="otp-label" htmlFor="new-password">New password</label>
                     <input id="new-password" className="form-field" type="password"
-                        name="newPassword" autoComplete="new-password"
-                        value={details.newPassword} onChange={onChange} />
+                        name="newPassword" value={details.newPassword} onChange={onChange} />
                     <label className="otp-label" htmlFor="password-confirmation">Confirm password</label>
                     <input id="password-confirmation" className="form-field" type="password"
-                        name="passwordConfirmation" autoComplete="new-password"
-                        value={details.passwordConfirmation} onChange={onChange} />
+                        name="passwordConfirmation" value={details.passwordConfirmation} onChange={onChange} />
                     <button className="btn btn-outline-info btn-dark login-button" onClick={resetPassword}>
                         Reset password
                     </button>

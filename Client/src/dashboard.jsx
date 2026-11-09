@@ -110,18 +110,16 @@ function CustomerDashboard() {
             </div>
             {selectedProduct && <div className="order-panel">
                 <h2>Order {selectedProduct.name}</h2>
-                <input className="form-field" type="number" name="quantity" autoComplete="off"
-                    min="1" max={selectedProduct.available_stock}
+                <input className="form-field" type="number" min="1" max={selectedProduct.available_stock}
                     value={order.quantity} onChange={(event) => setOrder({ ...order, quantity: event.target.value })} placeholder="Quantity" />
-                <select className="form-field" name="paymentMethod" autoComplete="off" value={order.paymentMethod}
+                <select className="form-field" value={order.paymentMethod}
                     onChange={(event) => setOrder({ ...order, paymentMethod: event.target.value })}>
                     <option value="cod">Cash on delivery</option>
                     <option value="online">Online payment (recorded)</option>
                 </select>
-                <input className="form-field" type="tel" name="contact" autoComplete="tel" value={order.contact}
+                <input className="form-field" value={order.contact}
                     onChange={(event) => setOrder({ ...order, contact: event.target.value })} placeholder="Contact number" />
-                <textarea className="form-field" name="deliveryAddress" autoComplete="street-address"
-                    value={order.deliveryAddress}
+                <textarea className="form-field" value={order.deliveryAddress}
                     onChange={(event) => setOrder({ ...order, deliveryAddress: event.target.value })} placeholder="Delivery address" />
                 <button className="btn btn-outline-success btn-sm" onClick={placeOrder}>Place order</button>
             </div>}
@@ -243,8 +241,7 @@ function Dashboard() {
                     <tbody>{retailerOrders.map((item) => <tr key={item.id}>
                         <td>{item.product_name}</td><td>{item.customer_username}</td><td>{item.quantity}</td>
                         <td>₹{item.total_amount}</td><td>{item.payment_method}</td><td>{item.delivery_address}</td>
-                        <td><select name={`order-status-${item.id}`} autoComplete="off" value={item.status}
-                            onChange={(event) => updateOrderStatus(item.id, event.target.value)}>
+                        <td><select value={item.status} onChange={(event) => updateOrderStatus(item.id, event.target.value)}>
                             <option value="pending">Pending</option><option value="confirmed">Confirmed</option>
                             <option value="fulfilled">Fulfilled</option><option value="cancelled">Cancelled</option>
                         </select></td>
@@ -274,14 +271,12 @@ function Dashboard() {
                     <label key={name}>
                         {label}
                         {type === "select" ? (
-                            <select className="form-field" name={name} autoComplete="off"
-                                value={record[name]} onChange={(event) => setRecord({ ...record, [name]: event.target.value })}>
+                            <select className="form-field" value={record[name]} onChange={(event) => setRecord({ ...record, [name]: event.target.value })}>
                                 <option value="">Select</option>
                                 {options.map((option) => <option key={option} value={option}>{option}</option>)}
                             </select>
                         ) : (
-                            <input className="form-field" name={name} autoComplete="off"
-                                type={type || "text"} value={record[name]}
+                            <input className="form-field" type={type || "text"} value={record[name]}
                                 onChange={(event) => setRecord({ ...record, [name]: event.target.value })} />
                         )}
                     </label>
@@ -289,8 +284,7 @@ function Dashboard() {
                 <button className="btn btn-outline-success btn-sm" onClick={save}>{record[section.id] ? "Update" : "Add"}</button>
             </div>
             {message && <div className="alert alert-warning">{message}</div>}
-            <input className="form-field business-search" name="search" autoComplete="off"
-                placeholder="Search records" value={search} onChange={(event) => setSearch(event.target.value)} />
+            <input className="form-field business-search" placeholder="Search records" value={search} onChange={(event) => setSearch(event.target.value)} />
             <div className="table-responsive">
                 <table className="table table-bordered text-center">
                     <thead><tr>{section.columns.map((column) => <th key={column}>{section.columnLabels[column]}</th>)}{profile.role === "admin" && <th>Owner</th>}<th>Actions</th></tr></thead>
