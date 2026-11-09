@@ -1,23 +1,29 @@
-# Employee Management System
+# Retail Business Management Platform
 
-A full-stack employee management application with a React/Vite client and a Node.js/Express API backed by MySQL. Users sign up with an email verification OTP, then sign in with their username,
-password, and a login OTP to receive a JWT and manage employee records.
+A full-stack retail and business management platform with a React/Vite client
+and a Node.js/Express API backed by MySQL. Retailers can manage products,
+customers, suppliers, agents, inventory, orders, and finances. Customers can
+browse products and place delivery orders.
 
 ## Features
 
-- Email-verified signup and username/password plus OTP sign-in with JWT authentication
-- Protected employee management dashboard
-- List, add, update, and delete employee records
-- MySQL persistence through the Node.js API
-- React Router-based client navigation
-- Bootstrap-based styling and responsive tables
+- Email-verified signup, login OTP, password reset OTP, and JWT authentication
+- Customer, retailer, and administrator roles with protected backend routes
+- Retailer dashboard for products, customers, suppliers, agents, and finance
+- Customer storefront with product cards, images, stock, and order placement
+- COD and online-payment recording with delivery address and contact details
+- Transactional stock updates that prevent overselling
+- Automatic finance receivables generated from customer orders
+- Yearly financial summaries, including inventory value and net worth
+- MySQL persistence with Indian Standard Time handling
+- Responsive Bootstrap-based interface
 
 ## Technology Stack
 
 - **Client:** React, Vite, React Router, Axios, Bootstrap
 - **Server:** Node.js, Express, CORS, JSON Web Token
-- **Database:** MySQL
-- **NodeMailer:** Bervo SMTP
+- **Database:** MySQL/Aiven MySQL
+- **Email:** Nodemailer with Brevo SMTP
 
 ## Project Structure
 
@@ -30,8 +36,8 @@ Git_Project/
 ## Prerequisites
 
 - Node.js and npm
-- MySQL Server
-- An `emp` table in the configured database with `No`, `Name`, and `Address` columns
+- MySQL Server or an Aiven MySQL instance
+- SMTP credentials from Brevo or another compatible provider
 
 ## Installation
 
@@ -87,14 +93,14 @@ Users are stored in the MySQL `users` table. During signup, a six-digit OTP
 verifies the supplied email. During login, a new OTP is sent to that user's
 registered email; each OTP expires after five minutes and is invalidated after
 five incorrect attempts. Passwords are stored as salted scrypt hashes.
-Employee records are owned by the authenticated username, so each user can
-only view and modify their own records. The single administrator account can
-also view unowned records; its username is configured as `loki_adii`.
+Business records are owned by the authenticated username, so each retailer can
+only view and modify their own records. The administrator can view all records;
+the administrator username is configured as `loki_adii`.
 
 The dashboard also provides management sections for Products, Customers,
 Agents, Suppliers, and Finance. Each record is owned by the authenticated
-user; the administrator can view all records. The `Emp` table is used as the
-Agents table, while the other sections use `Products`, `Customers`,
+user; the administrator can view all records. The legacy `Emp` table is used
+for agent records, while the other sections use `Products`, `Customers`,
 `Suppliers`, and `Finance` tables with primary keys and owner foreign keys.
 Customer records contain contact, email, bill date, paid amount, and pending
 amount. Finance also provides a combined overview using product inventory
@@ -150,10 +156,10 @@ during signup; it is not the old `auth.password` value in `local.json`.
 | `POST` | `/login/verify-otp` | No | Verify login OTP and return a JWT |
 | `POST` | `/login/password-reset/request-otp` | No | Send password reset OTP |
 | `POST` | `/login/password-reset/verify-otp` | No | Verify OTP and update password |
-| `GET` | `/emps` | JWT | List employees |
-| `POST` | `/emps` | JWT | Add an employee |
-| `PUT` | `/emps/:No` | JWT | Update an employee |
-| `DELETE` | `/emps/:No` | JWT | Delete an employee |
+| `GET` | `/emps` | JWT | List agent records |
+| `POST` | `/emps` | JWT | Add an agent |
+| `PUT` | `/emps/:No` | JWT | Update an agent |
+| `DELETE` | `/emps/:No` | JWT | Delete an agent |
 
 Send the token returned by `/login` in the protected request header:
 
@@ -174,11 +180,8 @@ npm run preview  # Preview the production build
 
 ## Development Notes
 
-- The current login implementation is intended for development/testing and reads credentials from local configuration.
-- Login email notifications are sent only after successful authentication. A
-  mail delivery failure is logged by the server but does not prevent the user
-  from receiving a valid JWT.
-- Employee queries are assembled in the server routes; add validation and parameterized queries before production use.
+- Login email notifications are sent only after successful authentication.
+- The server initializes and migrates the required business tables at startup.
 - Configure CORS and authentication secrets appropriately for a deployed environment.
 
 ## Deployment
