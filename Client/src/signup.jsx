@@ -53,18 +53,23 @@ function Signup() {
                 {!otpRequested ? <>
                     <label className="otp-label" htmlFor="signup-username">Username</label>
                     <input id="signup-username" className="form-field" name="username"
+                        autoComplete="username"
                         value={details.username} onChange={onChange} />
                     <label className="otp-label" htmlFor="signup-email">Email</label>
                     <input id="signup-email" className="form-field" type="email" name="email"
+                        autoComplete="email"
                         value={details.email} onChange={onChange} />
                     <label className="otp-label" htmlFor="signup-password">Password</label>
                     <input id="signup-password" className="form-field" type="password" name="password"
+                        autoComplete="new-password"
                         value={details.password} onChange={onChange} />
                     <label className="otp-label" htmlFor="signup-confirmation">Confirm password</label>
                     <input id="signup-confirmation" className="form-field" type="password"
-                        name="passwordConfirmation" value={details.passwordConfirmation} onChange={onChange} />
+                        name="passwordConfirmation" autoComplete="new-password"
+                        value={details.passwordConfirmation} onChange={onChange} />
                     <label className="otp-label" htmlFor="signup-account-type">Account type</label>
                     <select id="signup-account-type" className="form-field" name="accountType"
+                        autoComplete="off"
                         value={details.accountType || ""} onChange={onChange}>
                         <option value="">Choose account type</option>
                         <option value="retailer">Retailer</option>
@@ -75,7 +80,8 @@ function Signup() {
                     </button>
                 </> : <>
                     <p>Enter the OTP sent to your email.</p>
-                    <input className="form-field" type="text" inputMode="numeric" maxLength="6"
+                    <input id="signup-otp" className="form-field" type="text" inputMode="numeric"
+                        name="otp" autoComplete="one-time-code" maxLength="6"
                         value={otp} onChange={(event) => setOtp(event.target.value)} />
                     <button className="btn btn-outline-info btn-dark login-button" onClick={verifyOtp}>
                         Verify email and create account

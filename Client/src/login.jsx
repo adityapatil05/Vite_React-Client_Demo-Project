@@ -67,6 +67,7 @@ return ( <>
                             className="form-field"
                             type="text"
                             name="username"        
+                            autoComplete="username"
                                    value={credentials.username}
                                    onChange={OnTextChange} />
                         </td>
@@ -77,6 +78,7 @@ return ( <>
                             <input type="password" 
                             className="form-field" 
                             name="password"
+                            autoComplete="current-password"
                             value={credentials.password}
                             onChange={OnTextChange} />
                         </td>
@@ -96,6 +98,8 @@ return ( <>
                             type="text"
                             inputMode="numeric"
                             maxLength="6"
+                            name="otp"
+                            autoComplete="one-time-code"
                             value={otp}
                             onChange={(event) => setOtp(event.target.value)}
                         />

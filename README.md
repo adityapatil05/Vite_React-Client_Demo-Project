@@ -77,9 +77,10 @@ For environment-based configuration, copy `Server/.env.example` to
 this file automatically. Never commit `Server/.env`.
 
 After valid credentials, the server sends the OTP to the registered email
-address using Google SMTP. `SMTP_USER`, `SMTP_PASS`, and `MAIL_FROM` are
-server-only variables and are never sent by the client. For Gmail, use an App
-Password for `SMTP_PASS`, not your normal password.
+address using SMTP. `SMTP_USER`, `SMTP_PASS`, and `MAIL_FROM` are server-only
+variables and are never sent by the client. For Brevo, use
+`smtp-relay.brevo.com` with port `2525` and the Brevo SMTP key as
+`SMTP_PASS`.
 
 Users are stored in the MySQL `users` table. During signup, a six-digit OTP
 verifies the supplied email. During login, a new OTP is sent to that user's
