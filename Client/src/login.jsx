@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./login.css";
 import API_URL from "./api";
+import { saveToken } from "./authStorage";
 
 function Login() {
 const [credentials,setCredentials]=useState({username:"",password:""})
@@ -45,7 +46,7 @@ const VerifyOtp=()=>{
         otp
     })
     .then((result)=>{
-        sessionStorage.setItem("token",result.data.jwt)
+        saveToken(result.data.jwt);
         navigate("/db",{replace:true});
     })
     .catch((error)=>{

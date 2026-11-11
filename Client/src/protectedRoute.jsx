@@ -1,7 +1,8 @@
 import { Navigate } from "react-router-dom";
+import { getToken } from "./authStorage";
 
 function ProtectedRoute(props) {
-    if (sessionStorage.getItem("token")!=null)
+    if (getToken() != null)
     //it means user has logged in and received token
     {
      return <>{props.children}</>   

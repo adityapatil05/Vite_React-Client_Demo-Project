@@ -14,18 +14,10 @@ import ProtectedRoute from './protectedRoute';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './profile.css';
 import './public.css';
+import { clearToken, getTokenPayload } from './authStorage';
 
 const getProfile = () => {
-    const token = sessionStorage.getItem('token');
-    if (!token) {
-        return null;
-    }
-
-    try {
-        return JSON.parse(atob(token.split('.')[1]));
-    } catch {
-        return null;
-    }
+    return getTokenPayload();
 };
 
 function Launcher() 
@@ -34,7 +26,7 @@ function Launcher()
     const profile = getProfile();
     const [isProfileOpen, setIsProfileOpen] = useState(false);
 const Logout=()=>{
-    sessionStorage.removeItem("token");
+    clearToken();
     setIsProfileOpen(false);
     navigate("/login",{replace:true});
 }
@@ -93,8 +85,8 @@ const Logout=()=>{
                     </div>
                 </nav>
                 <Routes>
-                    <Route path='/' element={<Home/>}/>
-                    <Route path='/home' element={<Home/>}/>
+                    <Route path='/' element={<Home isLoggedIn={Boolean(profile)} />}/>
+                    <Route path='/home' element={<Home isLoggedIn={Boolean(profile)} />}/>
                     <Route path='/contact' element={<ContactUs/>}/>
                     <Route path='/about' element={<AboutUs/>}/>
                     <Route path='/login' element={<Login/>}/>
@@ -105,6 +97,16 @@ const Logout=()=>{
                                                 </ProtectedRoute>}/>
                     <Route path='*' element={<NotFound/>}/>
                 </Routes>
+                <footer className="creator-credit">
+                    <span>Made by <strong>Aditya Mhatarmare</strong></span>
+                    <a
+                        href="https://www.linkedin.com/in/aditya-mhatarmare0101"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        LinkedIn
+                    </a>
+                </footer>
             </div>);
 }
 

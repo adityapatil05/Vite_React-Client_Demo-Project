@@ -122,3 +122,28 @@
     gap: 8px;
     margin-top: 20px;
 }
+
+.creator-credit {
+    align-items: center;
+    color: #64748b;
+    display: flex;
+    font-size: 0.78rem;
+    gap: 8px;
+    justify-content: center;
+    padding: 18px 0 24px;
+}
+
+.creator-credit strong {
+    color: #334155;
+    font-weight: 600;
+}
+
+.creator-credit a {
+    color: #0a66c2;
+    text-decoration: none;
+}
+
+.creator-credit a:hover,
+.creator-credit a:focus-visible {
+    text-decoration: underline;
+}

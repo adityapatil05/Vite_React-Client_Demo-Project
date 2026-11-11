@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import "./dashboard.css";
 import API_URL from "./api";
+import { getToken } from "./authStorage";
 
 const sections = {
     products: {
@@ -69,7 +70,7 @@ const recordName = (section) => section === "finance"
     : sections[section].icon.slice(0, -1).toLowerCase();
 
 function CustomerDashboard() {
-    const token = sessionStorage.getItem("token");
+    const token = getToken();
     const headers = { Authorization: `bearer ${token}` };
     const [products, setProducts] = useState([]);
     const [orders, setOrders] = useState([]);
@@ -168,7 +169,7 @@ function CustomerDashboard() {
 }
 
 function Dashboard() {
-    const token = sessionStorage.getItem("token");
+    const token = getToken();
     const profile = useMemo(() => JSON.parse(atob(token.split(".")[1])), [token]);
     const [activeSection, setActiveSection] = useState("products");
     const [rows, setRows] = useState([]);

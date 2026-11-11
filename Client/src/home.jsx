@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "./public.css";
 
-function Home() {
+function Home({ isLoggedIn }) {
     return (
         <main className="public-page home-page">
             <section className="public-hero">
@@ -13,14 +13,14 @@ function Home() {
                     A focused workspace for managing products, customers, orders,
                     inventory, and financial performance in one connected platform.
                 </p>
-                <div className="public-actions">
+                {!isLoggedIn && <div className="public-actions">
                     <Link className="btn btn-info btn-sm public-button-primary" to="/login">
                         Log in to your account
                     </Link>
                     <Link className="btn btn-outline-light btn-sm public-button-secondary" to="/signup">
                         Create an account
                     </Link>
-                </div>
+                </div>}
             </section>
             <section className="feature-grid" aria-label="Platform features">
                 <article className="feature-card">

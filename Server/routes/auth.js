@@ -89,7 +89,7 @@ const createToken = (username, role, request) => jwt.sign({
     }).format(new Date()),
     browserDetails: request.headers['user-agent'],
     role,
-}, config.get('jwt.secretKey'));
+}, config.get('jwt.secretKey'), { expiresIn: '60d' });
 
 const createOtpRecord = (otp) => ({
     hash: crypto.createHash('sha256').update(otp).digest('hex'),

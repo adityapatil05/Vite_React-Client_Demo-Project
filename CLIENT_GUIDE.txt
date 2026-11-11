@@ -29,6 +29,8 @@ HOW TO USE IT
 5. Enter the OTP received by email and create your account.
 6. Return to "Log in".
 7. Enter your username and password, then request and verify the login OTP.
+Your login stays active for up to 60 days, even after closing the browser.
+You can always log out manually from the profile menu.
 
 FOR BUSINESS OWNERS
 After signing in, use the dashboard buttons to:
@@ -55,4 +57,3 @@ WHY IT IS EASY TO USE
 HELP
 For support, contact:
 work.adityamhatarmare@gmail.com
-
