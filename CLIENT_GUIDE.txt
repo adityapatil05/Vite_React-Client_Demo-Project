@@ -1,0 +1,58 @@
+BUSINESS MANAGEMENT PLATFORM
+Client Quick Guide
+
+Website:
+https://bussiness-management-project0101.vercel.app
+
+WHAT THE WEBSITE DOES
+This platform helps retail businesses manage daily work in one place.
+It is simple, organised, and saves time by keeping business records together.
+
+MAIN FEATURES
+- Create a secure account and verify your email with an OTP.
+- Sign in using a password and email OTP.
+- Manage products, prices, stock, and product images.
+- Manage customers, contact details, bills, paid amounts, and pending amounts.
+- Manage suppliers and supplier payments.
+- Manage agents and customer information.
+- Record receivables and payables in the Finance section.
+- View orders and financial summaries.
+- Customers can browse available products and place orders.
+- Customers can choose cash on delivery or record an online payment.
+- Responsive design works on computers, tablets, and mobile phones.
+
+HOW TO USE IT
+1. Open the website.
+2. Select "Create an account".
+3. Enter your username, email, password, and account type.
+4. Click "Send verification OTP".
+5. Enter the OTP received by email and create your account.
+6. Return to "Log in".
+7. Enter your username and password, then request and verify the login OTP.
+
+FOR BUSINESS OWNERS
+After signing in, use the dashboard buttons to:
+- Add, edit, or remove records.
+- Update product stock and prices.
+- Track customers, suppliers, agents, and payments.
+- Review orders and financial information.
+
+FOR CUSTOMERS
+1. Sign up with the Customer account type.
+2. Sign in to open the storefront.
+3. Search or browse products.
+4. Select "Order now".
+5. Enter quantity, payment method, contact number, and delivery address.
+6. Place the order.
+
+WHY IT IS EASY TO USE
+- Clear sections for each part of the business.
+- Simple forms and easy-to-understand buttons.
+- Search helps customers find products quickly.
+- Important business totals are available in one dashboard.
+- Email OTP verification adds security without making login difficult.
+
+HELP
+For support, contact:
+work.adityamhatarmare@gmail.com
+

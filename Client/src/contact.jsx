@@ -17,7 +17,7 @@ function ContactUs() {
                     <span className="contact-icon">@</span>
                     <h2>Email support</h2>
                     <p>Send your questions and we will help you move forward.</p>
-                    <a href="mailto:support@avengers.business">support@avengers.business</a>
+                    <a href="mailto:work.adityamhatarmare@gmail.com">work.adityamhatarmare@gmail.com</a>
                 </article>
                 <article className="contact-card">
                     <span className="contact-icon">?</span>
@@ -29,7 +29,7 @@ function ContactUs() {
                     <span className="contact-icon">↗</span>
                     <h2>Start a conversation</h2>
                     <p>Tell us what you want to improve and we will point you in the right direction.</p>
-                    <a href="mailto:support@avengers.business?subject=Platform%20question">Contact our team</a>
+                    <a href="mailto:work.adityamhatarmare@gmail.com?subject=Platform%20question">Contact our team</a>
                 </article>
             </section>
         </main>
