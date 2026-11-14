@@ -63,8 +63,8 @@ The server uses the `config` package. Create or update `Server/config/local.json
   "ConnectionDetails": {
     "host": "localhost",
     "port": 3306,
-    "database": "nodedb",
-    "user": "root",
+    "database": "database_name",
+    "user": "user",
     "password": "your_mysql_password"
   },
   "AppicationPort": 9999,
@@ -78,11 +78,6 @@ The server uses the `config` package. Create or update `Server/config/local.json
 }
 ```
 
-`Server/config/local.json` is ignored by Git. Never commit database passwords or JWT secrets.
-For environment-based configuration, copy `Server/.env.example` to
-`Server/.env`, fill in the values, and restart the server. The server loads
-this file automatically. Never commit `Server/.env`.
-
 After valid credentials, the server sends the OTP to the registered email
 address using SMTP. `SMTP_USER`, `SMTP_PASS`, and `MAIL_FROM` are server-only
 variables and are never sent by the client. For Brevo, use
@@ -93,15 +88,10 @@ Users are stored in the MySQL `users` table. During signup, a six-digit OTP
 verifies the supplied email. During login, a new OTP is sent to that user's
 registered email; each OTP expires after five minutes and is invalidated after
 five incorrect attempts. Passwords are stored as salted scrypt hashes.
-Business records are owned by the authenticated username, so each retailer can
-only view and modify their own records. The administrator can view all records;
-the administrator username is configured as `loki_adii`.
 
 The dashboard also provides management sections for Products, Customers,
 Agents, Suppliers, and Finance. Each record is owned by the authenticated
-user; the administrator can view all records. The legacy `Emp` table is used
-for agent records, while the other sections use `Products`, `Customers`,
-`Suppliers`, and `Finance` tables with primary keys and owner foreign keys.
+user; the administrator can view all records.
 Customer records contain contact, email, bill date, paid amount, and pending
 amount. Finance also provides a combined overview using product inventory
 value, customer pending amounts, supplier pending amounts, and Finance
@@ -137,15 +127,6 @@ with that username and password. Login credentials are read from the MySQL
 used by the current login flow. If the server is configured for Aiven, make
 sure the account was created in that same Aiven database.
 
-### Administrator login
-
-The administrator uses the same login screen and the same username/password
-plus email OTP flow. Create the administrator account with username
-`loki_adii`; the server assigns that username the `admin` role automatically.
-After login, the JWT contains `role: "admin"` and the dashboard allows access
-to all business records. The administrator password is the password chosen
-during signup; it is not the old `auth.password` value in `local.json`.
-
 ## API Endpoints
 
 | Method | Endpoint | Authentication | Description |
@@ -156,16 +137,10 @@ during signup; it is not the old `auth.password` value in `local.json`.
 | `POST` | `/login/verify-otp` | No | Verify login OTP and return a JWT |
 | `POST` | `/login/password-reset/request-otp` | No | Send password reset OTP |
 | `POST` | `/login/password-reset/verify-otp` | No | Verify OTP and update password |
-| `GET` | `/emps` | JWT | List agent records |
-| `POST` | `/emps` | JWT | Add an agent |
-| `PUT` | `/emps/:No` | JWT | Update an agent |
-| `DELETE` | `/emps/:No` | JWT | Delete an agent |
+
 
 Send the token returned by `/login` in the protected request header:
 
-```text
-Authorization: Bearer <token>
-```
 
 ## Client Commands
 
